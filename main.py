@@ -1,4 +1,5 @@
 from config import *
+from ray import Distance
 import robot
 import pygame
 import math
@@ -20,10 +21,10 @@ r = robot.Robot(
     h=ROBOT_HEIGHT,
     theta=0,
     sensors=[
-        ("Front", ROBOT_WIDTH / 2, 0, 0),
-        ("Back", -ROBOT_WIDTH / 2, 0, math.pi),
-        ("Left", 0, ROBOT_HEIGHT / 2, math.pi / 2),
-        ("Right", 0, -ROBOT_HEIGHT / 2, -math.pi / 2),
+        Distance("Front", ROBOT_WIDTH / 2, 0, 0),
+        Distance("Back", -ROBOT_WIDTH / 2, 0, math.pi),
+        Distance("Left", 0, ROBOT_HEIGHT / 2, math.pi / 2),
+        Distance("Right", 0, -ROBOT_HEIGHT / 2, -math.pi / 2),
     ],
 )
 
