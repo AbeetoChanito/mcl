@@ -31,7 +31,7 @@ class MCL:
 
     def __init__(self):
         self.particles = [
-            Particle(random.uniform(-FIELD_SIZE / 2, FIELD_SIZE / 2), random.uniform(-FIELD_SIZE / 2, FIELD_SIZE / 2), 0.0) for _ in range(500)
+            Particle(0, 0, 0.0) for _ in range(500)
         ]
         self.prediction = (0.0, 0.0, 0.0)
 
@@ -58,6 +58,7 @@ class MCL:
                 y_sum += p.y
 
             self.prediction = (x_sum / len(self.particles), y_sum / len(self.particles), robot.theta)
+            return
         
         weight_sum = 0.0
 
