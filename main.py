@@ -12,7 +12,7 @@ screen = pygame.display.set_mode((SCREEN_SIZE, SCREEN_SIZE))
 pygame.display.set_caption("MCL Simulation")
 
 clock = pygame.time.Clock()
-font = pygame.font.SysFont(None, 24)
+font = pygame.font.SysFont("", 24)
 
 r = robot.Robot(
     x=0,
