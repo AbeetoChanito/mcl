@@ -2,6 +2,7 @@ import math
 import pygame
 from config import *
 from ray import *
+from mcl import MCL
 
 
 class Robot:
@@ -18,22 +19,31 @@ class Robot:
         self.sensors = sensors
 
         self.left_wheel_delta = 0.0
-        self.right_wheel_delta = 0.0
+        self.right_wheel_delta = 0.0 
+        self.mcl = MCL()
+
+        self.naive_x = 0
+        self.naive_y = 0
 
     def update(self, dt):
         self.x += self.v * math.cos(self.theta) * dt
         self.y += self.v * math.sin(self.theta) * dt
         self.theta += self.omega * dt
-        self.update_wheel_deltas(dt)
+        self.update_gaussian(dt)
         self.update_rays()
+        self.mcl.update(self)
 
     def update_rays(self):
         for sensor in self.sensors:
             sensor.update(self)
     
-    def update_wheel_deltas(self, dt):
+    def update_gaussian(self, dt):
         self.left_wheel_delta = (self.v - self.omega * self.h / 2) * dt + random.gauss(0, WHEEL_NOISE_STD)
         self.right_wheel_delta = (self.v + self.omega * self.h / 2) * dt + random.gauss(0, WHEEL_NOISE_STD)
+
+        s_naive = (self.left_wheel_delta + self.right_wheel_delta) / 2
+        self.naive_x += s_naive * math.cos(self.theta)
+        self.naive_y += s_naive * math.sin(self.theta)
 
     # ---------------- DRAWING FUNCTIONS ----------------
 
@@ -70,6 +80,9 @@ class Robot:
             y_text += 20
 
         pygame.draw.circle(screen, (200, 0, 0), world_to_screen(self.x, self.y), 5)
+        pygame.draw.circle(screen, (0, 200, 0), world_to_screen(self.mcl.prediction[0], self.mcl.prediction[1]), 5)
+        pygame.draw.circle(screen, (0, 0, 200), world_to_screen(self.naive_x, self.naive_y), 5)
+        self.mcl.draw_particles(screen)
 
         text = font.render(f"Left Wheel Delta: {self.left_wheel_delta:.4f} in", True, (0, 0, 0))
         screen.blit(text, (10, y_text))

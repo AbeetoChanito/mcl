@@ -53,18 +53,18 @@ class Distance:
         dx, dy = math.cos(th), math.sin(th)
 
         self.d_true = min(self.ray_to_wall(self.sx, self.sy, dx, dy), MAX_RAY)
-        self.d_noisy = self.d_true + random.gauss(0, DISTANCE_NOISE_STD)
+        self.d_noisy = max(0, self.d_true + random.gauss(0, DISTANCE_NOISE_STD))
 
         self.ex = self.sx + dx * self.d_true
         self.ey = self.sy + dy * self.d_true
 
     def p(self, particle):
-        c, s = math.cos(particle[2]), math.sin(particle[2])
+        c, s = math.cos(particle.theta), math.sin(particle.theta)
 
-        sx = particle[0] + self.x * c - self.y * s
-        sy = particle[1] + self.x * s + self.y * c
+        sx = particle.x + self.x * c - self.y * s
+        sy = particle.y + self.x * s + self.y * c
 
-        th = particle[2] + self.angle_offset
+        th = particle.theta + self.angle_offset
         dx, dy = math.cos(th), math.sin(th)
 
         d = min(self.ray_to_wall(sx, sy, dx, dy), MAX_RAY)
