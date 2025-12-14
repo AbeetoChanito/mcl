@@ -48,13 +48,13 @@ while running:
     r.v = 0.0
     r.omega = 0.0
 
-    if keys[pygame.K_UP]:
+    if keys[pygame.K_w]:
         r.v += speed
-    if keys[pygame.K_DOWN]:
+    if keys[pygame.K_s]:
         r.v -= speed
-    if keys[pygame.K_LEFT]:
+    if keys[pygame.K_a]:
         r.omega += turn
-    if keys[pygame.K_RIGHT]:
+    if keys[pygame.K_d]:
         r.omega -= turn
 
     r.update(dt)

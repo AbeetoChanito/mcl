@@ -23,7 +23,7 @@ class Particle:
 class MCL:
     @staticmethod
     def update_noisy(particle, left, right, theta):
-        s_noisy = (left + right) / 2 + random.gauss(0, WHEEL_NOISE_STD / math.sqrt(2))
+        s_noisy = (left + right) / 2 + random.gauss(0, PARTICLE_NOISE_STD)
 
         particle.x += s_noisy * math.cos((theta + particle.theta) / 2)
         particle.y += s_noisy * math.sin((theta + particle.theta) / 2)
