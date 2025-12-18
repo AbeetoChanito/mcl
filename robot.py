@@ -28,15 +28,17 @@ class Robot:
         self.theta += self.omega * dt
         self.update_gaussian(dt)
         self.update_rays()
-        self.mcl.update(self)
+        self.mcl.update(self, dt)
 
     def update_rays(self):
         for sensor in self.sensors:
             sensor.update(self)
     
     def update_gaussian(self, dt):
-        self.left_wheel_delta = (self.v - self.omega * self.h / 2) * dt + random.gauss(0, WHEEL_NOISE_STD)
-        self.right_wheel_delta = (self.v + self.omega * self.h / 2) * dt + random.gauss(0, WHEEL_NOISE_STD)
+        self.left_wheel_delta = (self.v - self.omega * self.h / 2) * dt
+        self.right_wheel_delta = (self.v + self.omega * self.h / 2) * dt 
+        self.left_wheel_delta += random.gauss(0, WHEEL_NOISE_STD * abs(self.left_wheel_delta))
+        self.right_wheel_delta += random.gauss(0, WHEEL_NOISE_STD * abs(self.right_wheel_delta))
 
     # ---------------- DRAWING FUNCTIONS ----------------
 

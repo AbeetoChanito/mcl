@@ -21,23 +21,26 @@ class Particle:
         return not (-HALF <= self.x <= HALF and -HALF <= self.y <= HALF)
 
 class MCL:
-    @staticmethod
-    def update_noisy(particle, left, right, theta):
-        s_noisy = (left + right) / 2 + random.gauss(0, PARTICLE_NOISE_STD)
+    def update_noisy(self, dt, particle, left_wheel_delta, right_wheel_delta, theta):
+        print(left_wheel_delta, right_wheel_delta)
+        left_wheel_delta += random.gauss(0, WHEEL_PARTICLE_NOISE_STD * abs(left_wheel_delta))
+        right_wheel_delta += random.gauss(0, WHEEL_PARTICLE_NOISE_STD * abs(right_wheel_delta))
+        s = (left_wheel_delta + right_wheel_delta) / 2
 
-        particle.x += s_noisy * math.cos((theta + particle.theta) / 2)
-        particle.y += s_noisy * math.sin((theta + particle.theta) / 2)
+        particle.x += s * math.cos((theta + particle.theta) / 2)
+        particle.y += s * math.sin((theta + particle.theta) / 2)
         particle.theta = theta
 
     def __init__(self):
         self.particles = [
-            Particle(0, 0, 0.0) for _ in range(500)
+            Particle(0.0, 0.0, 0.0) for _ in range(500)
         ]
         self.prediction = (0.0, 0.0, 0.0)
 
-    def update(self, robot):
+    def update(self, robot, dt):
         for p in self.particles:
             self.update_noisy(
+                dt,
                 p,
                 robot.left_wheel_delta,
                 robot.right_wheel_delta,
