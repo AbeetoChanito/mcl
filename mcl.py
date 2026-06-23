@@ -35,7 +35,6 @@ class MCL:
         self.previous_theta = None
     
     def set_pose(self, x, y, theta):
-        """Initialize all particles to a specific pose"""
         for p in self.particles:
             p.x = x
             p.y = y
@@ -45,7 +44,6 @@ class MCL:
         self.previous_theta = theta
     
     def get_odo_delta(self, l_delta, r_delta, theta):
-        """Calculate odometry delta using average theta"""
         if self.previous_theta is not None:
             true_theta = (theta + self.previous_theta) / 2.0
         else:
@@ -58,7 +56,6 @@ class MCL:
         return dx, dy
     
     def motion_update(self, l_delta, r_delta, current_theta):
-        """Update particle positions with noise based on movement magnitude"""
         dx, dy = self.get_odo_delta(l_delta, r_delta, current_theta)
         odo_hypot = math.hypot(dx, dy)
         
